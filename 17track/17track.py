@@ -155,7 +155,7 @@ def get_info():
         
         #跳过指引
         if n ==1:
-            br.save_screenshot('搜索后.png')
+            
             wait.until(EC.presence_of_element_located((By.XPATH,"/html/body/div[5]/div/div[5]/a[1]/i")))
             button = br.find_element_by_xpath("/html/body/div[5]/div/div[5]/a[1]/i")
             button.click()
