@@ -146,7 +146,7 @@ def get_info():
         
         pyperclip.copy(numbers)
         
-        shipping_no.send_keys('Keys.CONTROL,"v"')
+        shipping_no.send_keys(Keys.CONTROL,"v")
         #shipping_no.send_keys(numbers)
         
         #搜索
@@ -161,9 +161,7 @@ def get_info():
             button.click()
         #复制结果
         time.sleep(0.5)
-        br.save_screenshot('复制按钮前.png')
         br.find_element_by_xpath("//*[@id='jcPacakgeMenu']/div/button[1]").click()
-        br.save_screenshot('复制按钮后.png')
         paste = pyperclip.paste()
         print(paste)
         br.back()
