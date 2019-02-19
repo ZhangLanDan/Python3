@@ -6,12 +6,14 @@ import PySimpleGUI as sg
 ua = FakeUserAgent()
 headers = {'user-agent':ua.random}
 
-def crawl(url):
+def crawl(url,keyword):
     if url:
         r = requests.get(url,headers=headers)
         doc = pq(r.text)
+        count = 0
         for i in doc('div.result .t').items():
-            print(i.text())
+            count += 1
+            print([count,i.text(),keyword])
         href = doc('div#page a:last-child').attr('href')
         if href:
             next_ = 'https://www.baidu.com'+ href
@@ -22,22 +24,30 @@ def crawl(url):
 def title_crawl(keyword):
     
     url = f'https://www.baidu.com/s?wd={keyword}'
-    next_ = crawl(url)
+    next_ = crawl(url,keyword)
     if next_:
         n = 1
         while n< 10:
             n += 1
-            print(n)
-            next_ = crawl(next_)
-title_crawl('www.hu.com')
+            next_ = crawl(next_,keyword)
+
+# str_ = input('输入网站,quit结束\n')
+# total = [str_]
+# while True:
+#     str_ = input()
+#     if str_ != 'quit':
+#         total.append(str_)
+
+#     else:
+#         break
+# for i in total:
+#     title_crawl(i)
+#title_crawl('www.hu.com')
 
 def gui():
     layout = [        
-            [sg.Text('请输入提单号', size=(15, 1)),sg.RButton('运行'),sg.Button('退出')],
-            [sg.Text('''(使用前请确保已登录TMS系统,卡了无响应就是查询中,有问题及时反馈)
-          
-目前支持：直飞：784,176,160,880
-中转：176,180''')],
+            [sg.Text('请输入网址', size=(15, 1)),sg.RButton('运行'),sg.Button('退出')],
+            [sg.Text('留着写说明')],
             [sg.Multiline(focus=True,size=(40,10),do_not_clear=True)],
             [sg.Text('结果：',size=(40,1))],
             [sg.Output(size=(88, 20))],   
@@ -47,13 +57,10 @@ def gui():
     while True:
         event,value = window.Read()
         if event == '运行':
-            list1 = content.split('\n')
-            while '' in list1 :
-                        list1.remove('')
-            if value == ['\n']:
-                pass
-            else:
-                for i in list1:
-                    print(i)
+            list1 = value[0].split('\n')
+            for i in list1:
+                title_crawl(i)
         if event == '退出' or event is None:
             break
+if __name__ == '__main__':
+    gui() 

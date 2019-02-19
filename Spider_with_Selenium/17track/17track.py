@@ -67,7 +67,7 @@ def get_info():
             button = br.find_element_by_xpath("/html/body/div[5]/div/div[5]/a[1]/i")
             button.click()
         #复制结果
-        time.sleep(8)
+        time.sleep(3)
         br.find_element_by_xpath("//*[@id='jcPacakgeMenu']/div/button[1]").click()
         paste = pyperclip.paste()
         print(paste.replace('\n',''))
