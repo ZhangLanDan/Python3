@@ -1,16 +1,11 @@
 [[source]]
 name = "pypi"
-url = "https://mirrors.aliyun.com/pypi/simple"
+url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
 
 [packages]
-pyinstaller = "*"
-pyquery = "*"
-fake-useragent = "*"
-requests = "*"
-pysimplegui = "*"
 
 [requires]
 python_version = "3.6"

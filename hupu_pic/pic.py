@@ -126,7 +126,7 @@ def judge(name,image):
     except Exception as e:
         print(e)
         pass
-crawl_pic(3)
+#crawl_pic(3)
 names,base64_list = get_file_content('pic')
 #名字，分数
 try:

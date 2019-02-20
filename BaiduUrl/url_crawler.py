@@ -1,18 +1,27 @@
-from fake_useragent import FakeUserAgent
 import requests
 from pyquery import PyQuery as pq
-import PySimpleGUI as sg
 import os
+import PySimpleGUI as sg
 
 
 def get_stopwords():
-    with open('stop_words.txt','r') as f:
-        content = f.read()
-        return content
+    folder = os.path.exists('stop_words.txt')
+    if not folder:
+        with open('stop_words.txt','w+') as f:
+            content = ''
+    else:
+        with open('stop_words.txt','r') as f:
+            content = f.read()
+            return content
 
 def add_stopwords(new):
-    with open('stop_words.txt','a') as f:
-        f.write(new)
+    folder = os.path.exists('stop_words.txt')
+    if folder:
+        with open('stop_words.txt','a',encoding='gbk') as f:
+            f.write(new)
+    else:
+        with open('stop_words.txt','w+',encoding='gbk') as f:
+            f.write(new)
 
 def crawl(url,keyword,count=0):
     global all_info
@@ -22,19 +31,22 @@ def crawl(url,keyword,count=0):
         
             r = requests.get(url,headers=headers)
             doc = pq(r.text)
-            for i in doc('div.result .t').items():
+            for i in doc('div.result').items():
                 check = ''
-                title = i.text()
-                for i in words:
-                    if i in title:
-                        print('违规词',i)
+                title = i('.t').text()
+                url = i('.t a').attr('href')
+                for stop_word in words:
+                    if stop_word in title and stop_word!= '':
+                        print('违规词',stop_word)
                         check = '违规'
                         break
                 if check != '违规':
                     check = '不违规'
+                    stop_word = ''
                 count += 1
-                site = keyword.replace('site:','')
-                info = f'{count},{title},{site},{check}\n'
+                #site = keyword.replace('site:','')
+                title = title.replace(',',' ')
+                info = f'{count},{title},{url},{check},{stop_word}\n'
                 all_info += info
                 print(info)
 
@@ -66,8 +78,15 @@ def title_crawl(keyword):
         pass
 
 def to_csv(all_info):
-    with open("result.csv",'a') as f:
-        f.write(all_info)
+    folder = os.path.exists('result.csv')
+    if folder:
+        with open("result.csv",'a',errors='ignore') as f:
+            f.write(all_info)
+    else:
+        with open('result.csv','w+') as f:
+            f.write('序号,标题,网址,是否违规,违规词\n')
+            f.write(all_info)
+
 def gui():
     global all_info
     sg.SetOptions(background_color='#9FB8AD',      
@@ -87,7 +106,6 @@ def gui():
     window = sg.Window('114link',font=('Any 11')).Layout(layout)
 
     while True:
-
         event,value = window.Read()
         if event == '开始抓取':
             
@@ -95,19 +113,26 @@ def gui():
             list1 = [i.strip() for i in list1 if i.strip()!='']
             # print(list1)
             if list1:
+                n = 0
                 for i in list1:
+                    n += 1
                     i = f'site:{i}'
                     title_crawl(i)
+                    sg.OneLineProgressMeter('进度条', n,len(list1),'key', 'Optional message')
+                    
         if event == '添加规避词':
             list2 = value[1]
             new = list(set([i.strip() for i in list2.split('\n') if i.strip() != '']))
-            old = get_stopwords().split('\n')
+            if get_stopwords():
+                old = get_stopwords().split('\n')
+            else:
+                old = []
             #去重
 
             add = '\n'.join([i for i in new if i not in old])
             if add:
                 print('已添加规避词:',add.replace('\n',','))
-                if old != ['']:
+                if old != []:
                     add_stopwords('\n')
                 
                 add_stopwords(add)
@@ -123,7 +148,5 @@ def gui():
             break
 if __name__ == '__main__':
     all_info = ''
-    ua = FakeUserAgent()
-    headers = {'user-agent':ua.random}
-    gui() 
-
+    headers = {'user-agent':'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.17 Safari/537.36'}
+    gui()
