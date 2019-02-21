@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['C:\\Users\\Administrator\\Desktop\\git\\Python3\\BaiduUrl\\url_crawler.py'],
-             pathex=['C:\\Users\\Administrator\\Desktop\\git\\Python3\\BaiduUrl'],
+a = Analysis(['C:\\Users\\SI-GZ-1314\\Desktop\\git\\BaiduUrl\\url_crawler.py'],
+             pathex=['C:\\Users\\SI-GZ-1314\\Desktop\\git\\BaiduUrl'],
              binaries=[],
              datas=[],
              hiddenimports=[],

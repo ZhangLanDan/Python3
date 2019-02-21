@@ -46,7 +46,7 @@ def crawl(url,keyword,count=0):
                 count += 1
                 #site = keyword.replace('site:','')
                 title = title.replace(',',' ')
-                info = f'{count},{title},{url},{check},{stop_word}\n'
+                info = f'{count},{title},{check},{stop_word}\n'
                 all_info += info
                 print(info)
 
@@ -84,7 +84,7 @@ def to_csv(all_info):
             f.write(all_info)
     else:
         with open('result.csv','w+') as f:
-            f.write('序号,标题,网址,是否违规,违规词\n')
+            f.write('序号,标题,是否违规,违规词\n')
             f.write(all_info)
 
 def gui():
