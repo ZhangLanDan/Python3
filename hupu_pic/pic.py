@@ -121,7 +121,7 @@ def judge(name,image):
                 if mark > 70:
                     n += 1
                     print(name,mark)
-                    shutil.move(rf'C:\Users\Administrator\Desktop\hupu_pic\pic\{name}',rf'C:\Users\Administrator\Desktop\hupu_pic\70+\{mark}{name}')
+                    shutil.move(rf'pic\{name}',rf'70+\{mark}{name}')
                 
     except Exception as e:
         print(e)
