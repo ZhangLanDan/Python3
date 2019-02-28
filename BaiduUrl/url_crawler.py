@@ -31,31 +31,36 @@ def crawl(url,keyword,count=0):
         
             r = requests.get(url,headers=headers)
             doc = pq(r.text)
-            for i in doc('div.result').items():
-                check = ''
-                title = i('.t').text()
-                url = i('.t a').attr('href')
-                for stop_word in words:
-                    if stop_word in title and stop_word!= '':
-                        print('违规词',stop_word)
-                        check = '违规'
-                        break
-                if check != '违规':
-                    check = '不违规'
-                    stop_word = ''
-                count += 1
-                #site = keyword.replace('site:','')
-                title = title.replace(',',' ')
-                info = f'{count},{title},{check},{stop_word}\n'
-                all_info += info
-                print(info)
-
-            href = doc('div#page a:last-child').attr('href')
-            if href:
-                next_ = 'https://www.baidu.com'+ href
-            #print(next_)
-            else:
-                next_ = []
+            #整条搜索结果
+            first =  doc('#content_left #1 .t').text()
+            if first:
+                title = first
+            #第一条没有标题则选第二条
+            else :
+                title =  doc('#content_left #2 .t').text()
+            check = ''
+            for stop_word in words:
+                if stop_word in title and stop_word!= '':
+                    print('违规词',stop_word)
+                    check = '违规'
+                    break
+            if check != '违规':
+                check = '不违规'
+                stop_word = ''
+            count += 1
+            #site = keyword.replace('site:','')
+            title = title.replace(',',' ')
+            keyword = keyword.replace('site:','')
+            info = f'{title},{keyword},{check},{stop_word}\n'
+            all_info += info
+            print(info)
+            next_ = []
+            # href = doc('div#page a:last-child').attr('href')
+            # if href:
+            #     next_ = 'https://www.baidu.com'+ href
+            # #print(next_)
+            # else:
+            #     next_ = []
             return next_,count
         except Exception as e:
             print(e)
@@ -84,7 +89,7 @@ def to_csv(all_info):
             f.write(all_info)
     else:
         with open('result.csv','w+') as f:
-            f.write('序号,标题,是否违规,违规词\n')
+            f.write('标题,域名,是否违规,违规词\n')
             f.write(all_info)
 
 def gui():

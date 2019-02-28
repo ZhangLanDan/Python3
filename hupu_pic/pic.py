@@ -53,7 +53,7 @@ def get_images(url):
             n+= 1
             suffix = i[find_last(i,'.'):]
             name = f'{title}-{n}{suffix}'   
-            with open(f'pic/{name}','wb') as f:
+            with open(f'全部照片/{name}','wb') as f:
                 f.write(requests.get(i).content)
         if n == 0:
             #os.rmdir(title) 
@@ -86,7 +86,7 @@ def get_file_content(dirname):
     path = os.getcwd()
     files = os.listdir(dirname)
     names = [i for i in files]
-    imgs = [f'{path}\\pic\\{i}' for i in names]
+    imgs = [f'{path}\\全部照片\\{i}' for i in names]
     #转base64
     base64_list = []
     for img in imgs:
@@ -121,18 +121,25 @@ def judge(name,image):
                 if mark > 70:
                     n += 1
                     print(name,mark)
-                    shutil.move(rf'pic\{name}',rf'70+\{mark}{name}')
+                    shutil.move(rf'全部照片\{name}',rf'高分照片\{mark}{name}')
                 
     except Exception as e:
         print(e)
         pass
-#crawl_pic(3)
-names,base64_list = get_file_content('pic')
+
+
 #名字，分数
 try:
-        os.mkdir('70+')
+        os.mkdir('高分照片')
 except:
     pass
+try:
+        os.mkdir('全部照片')
+except:
+    pass
+
+#crawl_pic(3)
+names,base64_list = get_file_content('全部照片')
 #总共
 total = 0
 #高分

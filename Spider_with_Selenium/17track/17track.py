@@ -12,9 +12,9 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import xlwings as xw
 
 
-wb = xw.Book('a.xlsx')
+wb = xw.Book('b.xlsx')
 sht = wb.sheets[0]
-values = sht.range('a2:a84').options(transpose=True).value
+values = sht.range('b2:b861').options(transpose=True).value
 total = [i+'\n' for i in values if i!= None]
 
 

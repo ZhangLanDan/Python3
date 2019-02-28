@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Error>
-  <Code>NoSuchKey</Code>
-  <Message>The specified key does not exist.</Message>
-  <RequestId>5C6D871DBE768FD0F90F1E36</RequestId>
-  <HostId>hupu-i1i5.oss-cn-hangzhou.aliyuncs.com</HostId>
-  <Key>hupuapp/bbs/251/42453251/thread_42453251_20190221005643_s_225662_w_1488_h_1984_59664.jpg</Key>
-</Error>
